@@ -16,11 +16,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Plateforme implements Serializable {
+public class Editeur implements Serializable{
 	
-	/**	 */
+	/**  */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -29,6 +29,6 @@ public class Plateforme implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Plateforme [id=" + id + ", nom=" + nom + "]";
+		return "Editeur [id=" + id + ", nom=" + nom + "]";
 	}
-} 
+}

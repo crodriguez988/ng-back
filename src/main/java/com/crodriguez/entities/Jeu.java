@@ -1,8 +1,12 @@
 package com.crodriguez.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,10 +15,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Jeu {
+public class Jeu implements Serializable {
 	
-	// TODO : Finir de mettre les @id etc etcs
-	private Long id;
+	/**	 */
+	private static final long serialVersionUID = -8703680295045491791L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	
 	private String nom;
 	private Date dateSortie;
 	private String synopsis;
@@ -23,7 +32,7 @@ public class Jeu {
 	private Boolean cooperatif;
 	private Boolean multijoueur;
 	
-	public Jeu(Long id, String nom, Date dateSortie, String synopsis, Boolean goty, Boolean solo, Boolean cooperatif,
+	public Jeu(long id, String nom, Date dateSortie, String synopsis, Boolean goty, Boolean solo, Boolean cooperatif,
 			Boolean multijoueur) {
 		super();
 		this.id = id;
