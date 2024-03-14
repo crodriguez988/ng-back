@@ -30,6 +30,7 @@ public class Jeu implements Serializable {
 	
 	private static final long serialVersionUID = -8703680295045491791L;
 
+	/** L'id du jeu-video */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "jeu_id")

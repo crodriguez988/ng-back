@@ -34,7 +34,7 @@ public class Editeur implements Serializable{
 	private long id;
 	
 	/** Le nom de l'éditeur*/
-	@Column(name = "nom")
+	@Column(name = "nom", length = 300)
 	private String nom;
 	
 	@Override

@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StudioDevDTO {
 	
+	/** L'id du studio développeur */
 	private long id;
+	
+	/** Le nom du studio */
 	private String nom;
 
 	@Override

@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlateformeDTO {
 	
-	private Long id;
+	/** L'id de la plateforme */
+	private long id;
+	
+	/** Le nom de la plateforme */
 	private String nom;
 	
 	@Override
