@@ -1,4 +1,4 @@
-package com.crodriguez.dtos;
+package com.nextgame.dtos;
 
 import java.util.Date;
 

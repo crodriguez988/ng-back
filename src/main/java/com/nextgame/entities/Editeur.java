@@ -1,4 +1,4 @@
-package com.crodriguez.entities;
+package com.nextgame.entities;
 
 import java.io.Serializable;
 
@@ -14,30 +14,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "STUDIO_DEV")
+@Table(name = "EDITEUR")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 /**
- * Cette classe permet de gérer le(s) Studio(s) qui a/ont développé le jeu
+ * Cette classe contient les informations d'un éditeur pour un jeu vidéo
+ * L'éditeur s'occupe de la distribution, publicité, etc pour un jeu-vidéo
  */
-public class StudioDev implements Serializable{
+public class Editeur implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	/** L'id du Studio */
+	/** L'id de l'éditeur*/
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "studio_id")
+	@Column(name = "editeur_id")
 	private long id;
 	
-	/** Nom du Studio */
-	@Column(name = "noms")
+	/** Le nom de l'éditeur*/
+	@Column(name = "nom", length = 300)
 	private String nom;
-
+	
 	@Override
 	public String toString() {
-		return "StudioDev [id=" + id + ", nom=" + nom + "]";
+		return "Editeur [id=" + id + ", nom=" + nom + "]";
 	}
 }

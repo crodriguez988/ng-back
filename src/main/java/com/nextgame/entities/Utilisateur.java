@@ -1,4 +1,4 @@
-package com.crodriguez.entities;
+package com.nextgame.entities;
 
 public class Utilisateur {
 	private String mail;

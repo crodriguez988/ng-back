@@ -1,4 +1,4 @@
-package com.crodriguez.dtos;
+package com.nextgame.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EditeurDTO {
+public class UtilisateurDTO {
 	
-	private long id;
-	private String nom;
+	private String mail;
+	private String pseudo;
 	
 	@Override
 	public String toString() {
-		return "Editeur [id=" + id + ", nom=" + nom + "]";
+		return "UtilisateurDTO [mail=" + mail + ", pseudo=" + pseudo + "]";
 	}
 }

@@ -1,4 +1,4 @@
-package com.crodriguez.entities;
+package com.nextgame.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;

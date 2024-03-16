@@ -1,4 +1,4 @@
-package com.crodriguez.entities;
+package com.nextgame.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,8 +37,8 @@ public class Genre implements Serializable {
 	private long id;
 
 	/** Indique le nom du genre */
-	@Column(name = "nom")
-	private String nom;
+	@Column(name = "libelle")
+	private String libelle;
 	
 	/** Cette liste permet de créer une table d'association entre Genre et Jeu */
 	@ManyToMany
@@ -49,6 +49,6 @@ public class Genre implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Genre [id=" + id + ", nom=" + nom + "]";
+		return "Genre [id=" + id + ", nom=" + libelle + "]";
 	}
 }

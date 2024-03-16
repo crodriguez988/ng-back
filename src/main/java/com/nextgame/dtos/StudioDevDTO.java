@@ -1,4 +1,4 @@
-package com.crodriguez.dtos;
+package com.nextgame.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,16 +7,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlateformeDTO {
+public class StudioDevDTO {
 	
-	/** L'id de la plateforme */
+	/** L'id du studio développeur */
 	private long id;
 	
-	/** Le nom de la plateforme */
+	/** Le nom du studio */
 	private String nom;
-	
+
 	@Override
 	public String toString() {
-		return "PlateformeDTO [id=" + id + ", nom=" + nom + "]";
+		return "StudioDev [id=" + id + ", nom=" + nom + "]";
 	}
 }

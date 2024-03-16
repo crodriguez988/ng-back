@@ -1,4 +1,4 @@
-package com.crodriguez.dtos;
+package com.nextgame.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,16 +7,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudioDevDTO {
+public class GenreDTO {
 	
-	/** L'id du studio développeur */
+	/** L'id du genre */
 	private long id;
 	
-	/** Le nom du studio */
-	private String nom;
-
+	/** Le libellé du genre */
+	private String libelle;
+	
 	@Override
 	public String toString() {
-		return "StudioDev [id=" + id + ", nom=" + nom + "]";
+		return "Genre [id=" + id + ", nom=" + libelle + "]";
 	}
 }
