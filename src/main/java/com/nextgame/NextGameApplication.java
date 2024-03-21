@@ -5,9 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-//@SpringBootApplication(scanBasePackages =  {"com.crodriguez.controller"})
-//@EntityScan(basePackages = {"com.crodriguez.entities"})
-//@EnableJpaRepositories(basePackages = {"com.crodriguez.repositories"})
 @SpringBootApplication
 @EntityScan
 @EnableJpaRepositories

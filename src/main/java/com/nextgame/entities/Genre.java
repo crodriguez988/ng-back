@@ -20,10 +20,10 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "GENRE")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 /**
  * Cette classe contient les différents genres pour un jeu-vidéo (action, FPS, TPS, etc...)
  */
