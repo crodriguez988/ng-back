@@ -57,7 +57,7 @@ public class GenreController {
 		//TODO Vérification que l'id existe
 		Genre genre = genreService.getById(id);
 		genre.setLibelle(genretDTO.getLibelle());
-		return genreMapperImpl.mapToDto(genre);
+		return genreMapperImpl.mapToDto(genreService.update(genreService.update(genreMapperImpl.mapToEntity(genretDTO))));
 	}
 	
 	@DeleteMapping(path = "/{id}")

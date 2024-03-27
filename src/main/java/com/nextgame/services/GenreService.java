@@ -34,6 +34,10 @@ public class GenreService {
 		return genreRespository.save(genre);
 	}
 	
+	public Genre update (Genre genre) {
+		return genreRespository.saveAndFlush(genre);
+	}
+	
 	/**
 	 * Supprime l'élément qui correpond à l'id passé en paramettre
 	 * @param id du genre
