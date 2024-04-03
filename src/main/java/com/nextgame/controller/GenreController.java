@@ -30,36 +30,64 @@ public class GenreController {
 	@Autowired
 	GenreMapperImpl genreMapperImpl;
 	
+	/**
+	 * EndPoint GET : Retourne une liste de genres
+	 * @return List<GenreDTO>
+	 */
 	@GetMapping()
 	public List<GenreDTO> getAllGenres (){
+		//TODO: remplacer les system par un vrai logger
 		System.err.println("GenreController - getAll()");
 		List<GenreDTO> listGenresDto = new ArrayList<>();
 		genreService.getAll().forEach(genre -> listGenresDto.add(genreMapperImpl.mapToDto(genre)));
 		System.err.println(listGenresDto);
+		
 		return listGenresDto;
 	}
 	
+	/**
+	 * Endpoint GET /id : Retourne l'objet genre en fonction de l'id passé dans le path
+	 * @param id
+	 * @return StudioDevDTO
+	 */
 	@GetMapping(path = "/{id}")
 	public GenreDTO getById(@PathVariable Long id) {
 		System.err.println("GenreController - getById()");
 		//TODO: Gerer si l'id n'existe pas
 		GenreDTO genreDto = genreMapperImpl.mapToDto(genreService.getById(id));
+		
 		return genreDto;
 	}
 	
+	/**
+	 * Endpoint POST : Permet de créer un nouveau genre
+	 * @param newGenre
+	 * @return GenreDTO
+	 */
 	@PostMapping
 	public GenreDTO post(@RequestBody GenreDTO newGenre) {
 		return genreMapperImpl.mapToDto(genreService.save(genreMapperImpl.mapToEntity(newGenre)));
 	}
 	
+	/**
+	 * Endpoint PUT : Permet de mettre à jour un genre en fonction de l'id dans le path
+	 * @param genretDTO
+	 * @param id
+	 * @return GenreDTO
+	 */
 	@PutMapping(path = "/{id}")
 	public GenreDTO update (@RequestBody(required = true) GenreDTO genretDTO, @PathVariable long id) {
 		//TODO Vérification que l'id existe
 		Genre genre = genreService.getById(id);
 		genre.setLibelle(genretDTO.getLibelle());
+		
 		return genreMapperImpl.mapToDto(genreService.update(genreService.update(genreMapperImpl.mapToEntity(genretDTO))));
 	}
 	
+	/**
+	 * Endpoint DELETE : Permet de supprimer un genre en fonction de l'id dans le path
+	 * @param id
+	 */
 	@DeleteMapping(path = "/{id}")
 	public void delete(@PathVariable Long id) {
 		System.err.println("GenreController - delete()");
