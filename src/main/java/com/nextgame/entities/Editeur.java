@@ -30,7 +30,7 @@ public class Editeur implements Serializable{
 	/** L'id de l'éditeur*/
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "editeur_id")
+	@Column(name = "id_editeur")
 	private long id;
 	
 	/** Le nom de l'éditeur*/

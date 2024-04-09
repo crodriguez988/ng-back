@@ -24,5 +24,4 @@ public class StudioDevMapperImpl implements Mapper<StudioDev, StudioDevDTO>{
 	public StudioDev mapToEntity(StudioDevDTO studioDevDTO) {
 		return  modelMapper.map(studioDevDTO, StudioDev.class);
 	}
-
 }

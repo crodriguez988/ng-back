@@ -1,6 +1,12 @@
 package com.nextgame.dtos;
 
 import java.util.Date;
+import java.util.List;
+
+import com.nextgame.entities.Editeur;
+import com.nextgame.entities.Genre;
+import com.nextgame.entities.Plateforme;
+import com.nextgame.entities.StudioDev;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,10 +25,8 @@ public class JeuDTO {
 	private Boolean solo;
 	private Boolean cooperatif;
 	private Boolean multijoueur;
-	
-	@Override
-	public String toString() {
-		return "JeuDTO [id=" + id + ", nom=" + nom + ", dateSortie=" + dateSortie + ", synopsis=" + synopsis + ", goty="
-				+ goty + ", solo=" + solo + ", cooperatif=" + cooperatif + ", multijoueur=" + multijoueur + "]";
-	}
+	private List<Genre> genres;
+	private List<StudioDev> studiosDev;
+	private List<Editeur> editeurs;
+	private List<Plateforme> plateformes;
 }

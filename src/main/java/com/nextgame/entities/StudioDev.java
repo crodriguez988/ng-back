@@ -29,11 +29,11 @@ public class StudioDev implements Serializable{
 	/** L'id du Studio */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "studio_id")
+	@Column(name = "id_studio")
 	private long id;
 	
 	/** Nom du Studio */
-	@Column(name = "noms")
+	@Column(name = "nom")
 	private String nom;
 
 	@Override

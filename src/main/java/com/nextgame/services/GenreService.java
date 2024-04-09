@@ -1,6 +1,5 @@
 package com.nextgame.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,22 +10,21 @@ import com.nextgame.entities.Genre;
 import com.nextgame.repositories.IGenreRespository;
 
 /**
- * Cette classe contient les services à utiliser par le controlleur
+ * Cette classe contient tous les appels CRUD du repository Genre
  */
 @Service
-public class GenreService {
+public class GenreService implements IService<Genre, Long>{
 	
 	@Autowired
 	IGenreRespository genreRespository;
 	
 	/** 
-	 * Retourne une liste contenant tous les genres
+	 * Retourne une liste de tous les genres
 	 * @return List<Genre>
 	 */
+	@Override
 	public List<Genre> getAll() {
-		List<Genre> genres = new ArrayList<Genre>();
-		genres.addAll(genreRespository.findAll());
-		return genres;
+		return genreRespository.findAll();
 	}
 	
 	/**
@@ -34,6 +32,7 @@ public class GenreService {
 	 * @param id
 	 * @return Genre
 	 */
+	@Override
 	public Genre getById(@PathVariable Long id) {
 		return genreRespository.getReferenceById(id);
 	}
@@ -43,6 +42,7 @@ public class GenreService {
 	 * @param genre
 	 * @return Genre
 	 */
+	@Override
 	public Genre save (Genre genre) {
 		return genreRespository.save(genre);
 	}
@@ -52,14 +52,16 @@ public class GenreService {
 	 * @param genre
 	 * @return Genre
 	 */
+	@Override
 	public Genre update (Genre genre) {
 		return genreRespository.saveAndFlush(genre);
 	}
 	
 	/**
-	 * Supprime l'élément qui correpond à l'id passé en paramettre
+	 * Supprime l'élément correpondant à l'id passé en paramètre
 	 * @param id du genre
 	 */
+	@Override
 	public void delete (Long id) {
 		genreRespository.deleteById(id);
 	}

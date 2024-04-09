@@ -3,8 +3,8 @@ package com.nextgame.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.nextgame.entities.Editeur;
+import com.nextgame.entities.Jeu;
 
 @Repository
-public interface IEditeurRepository extends JpaRepository<Editeur, Long> {
+public interface IJeuRepository extends JpaRepository<Jeu, Long>{
 }

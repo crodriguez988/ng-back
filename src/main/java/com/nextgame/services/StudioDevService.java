@@ -14,7 +14,7 @@ import com.nextgame.repositories.IStudioDevRespository;
  * 
  */
 @Service
-public class StudioDevService {
+public class StudioDevService implements IService<StudioDev, Long>{
 	
 	@Autowired
 	IStudioDevRespository studioDevRespository;
@@ -23,6 +23,7 @@ public class StudioDevService {
 	 * Retourne une liste contenant tous les studios développeurs
 	 * @return List<StudioDev>
 	 */
+	@Override
 	public List<StudioDev> getAll() {
 		List<StudioDev> studioDevs = new ArrayList<StudioDev>();
 		studioDevs.addAll(studioDevRespository.findAll());
@@ -34,6 +35,7 @@ public class StudioDevService {
 	 * @param id
 	 * @return StudioDev
 	 */
+	@Override
 	public StudioDev getById(@PathVariable Long id) {
 		return studioDevRespository.getReferenceById(id);
 	}
@@ -43,6 +45,7 @@ public class StudioDevService {
 	 * @param studioDev
 	 * @return StudioDev
 	 */
+	@Override
 	public StudioDev save (StudioDev studioDev) {
 		return studioDevRespository.save(studioDev);
 	}
@@ -52,6 +55,7 @@ public class StudioDevService {
 	 * @param studioDev
 	 * @return StudioDev
 	 */
+	@Override
 	public StudioDev update (StudioDev studioDev) {
 		return studioDevRespository.saveAndFlush(studioDev);
 	}
@@ -60,6 +64,7 @@ public class StudioDevService {
 	 * Supprime l'élément en fonction de l'id passé en paramètre
 	 * @param id du Studio
 	 */
+	@Override
 	public void delete (Long id) {
 		studioDevRespository.deleteById(id);
 	}

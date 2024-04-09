@@ -1,17 +1,12 @@
 package com.nextgame.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,19 +28,12 @@ public class Genre implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "genre_id")
+	@Column(name = "id_genre")
 	private long id;
 
 	/** Indique le nom du genre */
 	@Column(name = "libelle")
 	private String libelle;
-	
-	/** Cette liste permet de créer une table d'association entre Genre et Jeu */
-	@ManyToMany
-	@JoinTable( name = "genre_jeu",
-				joinColumns = @JoinColumn (name = "genre_id"),
-				inverseJoinColumns = @JoinColumn ( name = "jeu_id" ))
-	private List<Jeu> jeux = new ArrayList<>();
 	
 	@Override
 	public String toString() {
