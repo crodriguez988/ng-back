@@ -81,7 +81,7 @@ public class GenreController {
 		Genre genre = genreService.getById(id);
 		genre.setLibelle(genretDTO.getLibelle());
 		
-		return genreMapperImpl.mapToDto(genreService.update(genreService.update(genreMapperImpl.mapToEntity(genretDTO))));
+		return genreMapperImpl.mapToDto(genreService.update(genre));
 	}
 	
 	/**

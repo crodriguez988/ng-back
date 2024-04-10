@@ -29,12 +29,16 @@ public class Plateforme implements Serializable {
 	@Column(name = "id_plateforme")
 	private long id;
 	
-	/** Nom de la plateforme (PC / PS5 / XBOX etc) */
+	/** Nom de la plateforme (PC / Play Station 5 / XBOX etc) */
 	@Column(name = "nom")
 	private String nom;
 	
+	/** Abreviation du nom de la console */
+	@Column(name = "abreviation")
+	private String abreviation;
+
 	@Override
 	public String toString() {
-		return "Plateforme [id=" + id + ", nom=" + nom + "]";
+		return "Plateforme [id=" + id + ", nom=" + nom + ", abreviation=" + abreviation + "]";
 	}
 } 

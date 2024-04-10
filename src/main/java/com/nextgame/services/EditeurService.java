@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nextgame.entities.Editeur;
 import com.nextgame.repositories.IEditeurRepository;
 
+@Service
 public class EditeurService implements IService<Editeur, Long>{
 
 	@Autowired
@@ -51,7 +53,7 @@ public class EditeurService implements IService<Editeur, Long>{
 	 */
 	@Override
 	public Editeur update(Editeur editeur) {
-		return editeurRespository.saveAndFlush(editeur);
+		return editeurRespository.save(editeur);
 	}
 
 	/**

@@ -77,7 +77,7 @@ public class StudioDevController {
 		StudioDev studioDev = studioDevService.getById(id);
 		studioDev.setNom(studioDevDTO.getNom());
 		
-		return studioDevMapperImpl.mapToDto(studioDevService.update(studioDevService.update(studioDevMapperImpl.mapToEntity(studioDevDTO))));
+		return studioDevMapperImpl.mapToDto(studioDevService.update(studioDev));
 	}
 	
 	/**
