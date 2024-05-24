@@ -64,4 +64,9 @@ public class EditeurService implements IService<Editeur, Long>{
 	public void delete(Long id) {
 		editeurRespository.deleteById(id);
 	}
+
+	@Override
+	public boolean existById(Long id) {
+		return editeurRespository.existsById(id);
+	}
 }

@@ -12,4 +12,6 @@ public interface IService <E, ID>{
 	public E update (E entity);
 	
 	public void delete (ID id);
+	
+	public boolean existById(ID id);
 }

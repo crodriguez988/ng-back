@@ -19,6 +19,8 @@ import com.nextgame.entities.Plateforme;
 import com.nextgame.mappers.PlateformeMapperImpl;
 import com.nextgame.services.PlateformeService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/plateformes")
@@ -50,9 +52,14 @@ public class PlateformeController {
 	 */
 	@GetMapping(path = "/{id}")
 	public PlateformeDTO getById(@PathVariable Long id) {
-		//TODO: Gerer si l'id n'existe pas
-		PlateformeDTO PlateformeDTO = plateformeMapperImpl.mapToDto(plateformeService.getById(id));
-		return PlateformeDTO;
+		 // Vérifie que l'id existe 
+	    if(plateformeService.existById(id)) {
+	    	PlateformeDTO PlateformeDTO = plateformeMapperImpl.mapToDto(plateformeService.getById(id));
+			return PlateformeDTO;
+	    }
+	    else {
+	    	throw new EntityNotFoundException();
+	    }
 	}
 	
 	/**
@@ -73,12 +80,17 @@ public class PlateformeController {
 	 */
 	@PutMapping(path = "/{id}")
 	public PlateformeDTO update (@RequestBody(required = true) PlateformeDTO plateformeDTO, @PathVariable long id) {
-		//TODO Vérification que l'id existe
-		Plateforme plateforme = plateformeService.getById(id);
-		plateforme.setNom(plateformeDTO.getNom());
-		plateforme.setAbreviation(plateformeDTO.getAbreviation());
-		
-		return plateformeMapperImpl.mapToDto(plateformeService.update(plateforme));
+		 // Vérifie que l'id existe 
+	    if(plateformeService.existById(id)) {
+	    	Plateforme plateforme = plateformeService.getById(id);
+			plateforme.setNom(plateformeDTO.getNom());
+			plateforme.setAbreviation(plateformeDTO.getAbreviation());
+			
+			return plateformeMapperImpl.mapToDto(plateformeService.update(plateforme));
+	    }
+		else {
+	    	throw new EntityNotFoundException();
+	    }
 	}
 	
 	/**
@@ -87,7 +99,12 @@ public class PlateformeController {
 	 */
 	@DeleteMapping(path = "/{id}")
 	public void delete(@PathVariable Long id) {
-		//TODO: Vérifier si l'id existe
-		plateformeService.delete(id);
+		 // Vérifie que l'id existe 
+	    if(plateformeService.existById(id)) {
+	    	plateformeService.delete(id);
+	    }
+		else {
+		    	throw new EntityNotFoundException();
+	  }
 	}
 }

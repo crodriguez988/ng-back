@@ -19,6 +19,8 @@ import com.nextgame.entities.Genre;
 import com.nextgame.mappers.GenreMapperImpl;
 import com.nextgame.services.GenreService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/genres")
@@ -27,8 +29,7 @@ public class GenreController {
 	@Autowired
 	GenreService genreService;
 	
-	@Autowired
-	GenreMapperImpl genreMapperImpl;
+	@Autowired GenreMapperImpl genreMapperImpl;
 	
 	/**
 	 * EndPoint GET : Retourne une liste de genres
@@ -53,10 +54,13 @@ public class GenreController {
 	@GetMapping(path = "/{id}")
 	public GenreDTO getById(@PathVariable Long id) {
 		System.err.println("GenreController - getById()");
-		//TODO: Gerer si l'id n'existe pas
-		GenreDTO genreDto = genreMapperImpl.mapToDto(genreService.getById(id));
-		
-		return genreDto;
+		// Vérifie que l'id existe 
+	    if(genreService.existById(id)) {
+			return genreMapperImpl.mapToDto(genreService.getById(id));
+	    }
+		else {
+	    	throw new EntityNotFoundException();
+	    }
 	}
 	
 	/**
@@ -77,11 +81,16 @@ public class GenreController {
 	 */
 	@PutMapping(path = "/{id}")
 	public GenreDTO update (@RequestBody(required = true) GenreDTO genretDTO, @PathVariable long id) {
-		//TODO Vérification que l'id existe
-		Genre genre = genreService.getById(id);
-		genre.setLibelle(genretDTO.getLibelle());
-		
-		return genreMapperImpl.mapToDto(genreService.update(genre));
+		// Vérifie que l'id existe 
+	    if(genreService.existById(id)) {
+	    	Genre genre = genreService.getById(id);
+			genre.setLibelle(genretDTO.getLibelle());
+			
+			return genreMapperImpl.mapToDto(genreService.update(genre));
+	    }
+		else {
+	    	throw new EntityNotFoundException();
+	    }
 	}
 	
 	/**
@@ -91,7 +100,12 @@ public class GenreController {
 	@DeleteMapping(path = "/{id}")
 	public void delete(@PathVariable Long id) {
 		System.err.println("GenreController - delete()");
-		//TODO: Vérifier si l'id existe
-		genreService.delete(id);
+		// Vérifie que l'id existe 
+	    if(genreService.existById(id)) {
+	    	genreService.delete(id);
+	    }
+		else {
+	    	throw new EntityNotFoundException();
+	    }
 	}
 }

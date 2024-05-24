@@ -19,6 +19,8 @@ import com.nextgame.entities.StudioDev;
 import com.nextgame.mappers.StudioDevMapperImpl;
 import com.nextgame.services.StudioDevService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/studiosDev")
@@ -50,9 +52,14 @@ public class StudioDevController {
 	 */
 	@GetMapping(path = "/{id}")
 	public StudioDevDTO getById(@PathVariable Long id) {
-		//TODO: Gerer si l'id n'existe pas
-		StudioDevDTO studioDevDTO = studioDevMapperImpl.mapToDto(studioDevService.getById(id));
-		return studioDevDTO;
+		// Vérifie que l'id existe
+		if(studioDevService.existById(id)) {
+			StudioDevDTO studioDevDTO = studioDevMapperImpl.mapToDto(studioDevService.getById(id));
+			return studioDevDTO;
+		}
+		else {
+			throw new EntityNotFoundException();
+		}
 	}
 	
 	/**
@@ -73,11 +80,16 @@ public class StudioDevController {
 	 */
 	@PutMapping(path = "/{id}")
 	public StudioDevDTO update (@RequestBody(required = true) StudioDevDTO studioDevDTO, @PathVariable long id) {
-		//TODO Vérification que l'id existe
-		StudioDev studioDev = studioDevService.getById(id);
-		studioDev.setNom(studioDevDTO.getNom());
-		
-		return studioDevMapperImpl.mapToDto(studioDevService.update(studioDev));
+		// Vérifie que l'id existe
+		if(studioDevService.existById(id)) {
+			StudioDev studioDev = studioDevService.getById(id);
+			studioDev.setNom(studioDevDTO.getNom());
+			
+			return studioDevMapperImpl.mapToDto(studioDevService.update(studioDev));
+		}
+		else {
+			throw new EntityNotFoundException();
+		}
 	}
 	
 	/**
@@ -86,7 +98,12 @@ public class StudioDevController {
 	 */
 	@DeleteMapping(path = "/{id}")
 	public void delete(@PathVariable Long id) {
-		//TODO: Vérifier si l'id existe
-		studioDevService.delete(id);
+		// Vérifie que l'id existe
+		if(studioDevService.existById(id)) {
+			studioDevService.delete(id);
+		}
+		else {
+			throw new EntityNotFoundException();
+		}
 	}
 }

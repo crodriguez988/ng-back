@@ -19,6 +19,8 @@ import com.nextgame.entities.Editeur;
 import com.nextgame.mappers.EditeurMapperImpl;
 import com.nextgame.services.EditeurService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/editeurs")
@@ -39,7 +41,6 @@ public class EditeurController {
 		List<EditeurDTO> listEditeurDto = new ArrayList<>();
 		editeurService.getAll().forEach(editeur -> listEditeurDto.add(editeurMapperImpl.mapToDto(editeur)));
 		System.err.println(listEditeurDto);
-		
 		return listEditeurDto;
 	}
 	
@@ -50,10 +51,13 @@ public class EditeurController {
 	 */
 	@GetMapping(path = "/{id}")
 	public EditeurDTO getById(@PathVariable Long id) {
-		//TODO: Gerer si l'id n'existe pas
-		EditeurDTO EditeurDTO = editeurMapperImpl.mapToDto(editeurService.getById(id));
-		
-		return EditeurDTO;
+		// Vérifie que l'id existe
+		if(editeurService.existById(id)) {
+			return editeurMapperImpl.mapToDto(editeurService.getById(id));
+		}
+		else {
+			throw new EntityNotFoundException();
+		}
 	}
 	
 	/**
@@ -74,11 +78,15 @@ public class EditeurController {
 	 */
 	@PutMapping(path = "/{id}")
 	public EditeurDTO update (@RequestBody EditeurDTO editeurDTO, @PathVariable long id) {
-	    // Vérification que l'id existe
-	    Editeur editeur = editeurService.getById(id);
-	    editeur.setNom(editeurDTO.getNom());
-	    
-	    return editeurMapperImpl.mapToDto(editeurService.update(editeur));
+		// Vérifie que l'id existe
+		if(editeurService.existById(id)) {
+		    Editeur editeur = editeurService.getById(id);
+		    editeur.setNom(editeurDTO.getNom());
+		    return editeurMapperImpl.mapToDto(editeurService.update(editeur));
+		}
+		else {
+			throw new EntityNotFoundException();
+		}
 	}
 	
 	/**
@@ -87,7 +95,12 @@ public class EditeurController {
 	 */
 	@DeleteMapping(path = "/{id}")
 	public void delete(@PathVariable Long id) {
-		//TODO: Vérifier si l'id existe
-		editeurService.delete(id);
+		// Vérifie que l'id existe
+		if (editeurService.existById(id)){
+			editeurService.delete(id);
+		}
+		else {
+			throw new EntityNotFoundException();
+		}
 	}
 }

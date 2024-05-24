@@ -19,6 +19,8 @@ import com.nextgame.entities.Jeu;
 import com.nextgame.mappers.JeuMapperImpl;
 import com.nextgame.services.JeuService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/jeux")
@@ -49,10 +51,13 @@ public class JeuController {
 	 */
 	@GetMapping(path = "/{id}")
 	public JeuDTO getById(@PathVariable Long id) {
-		//TODO: Gerer si l'id n'existe pas
-		JeuDTO jeuDTO = jeuMapperImpl.mapToDto(jeuService.getById(id));
-		
-		return jeuDTO;
+		// Vérifie que l'id existe
+		if(jeuService.existById(id)) {
+			return jeuMapperImpl.mapToDto(jeuService.getById(id));
+		}
+		else {
+			throw new EntityNotFoundException();
+		}
 	}
 	
 	/**
@@ -73,11 +78,16 @@ public class JeuController {
 	 */
 	@PutMapping(path = "/{id}")
 	public JeuDTO update (@RequestBody JeuDTO jeuDTO, @PathVariable long id) {
-	    // Vérification que l'id existe
-	    Jeu jeu = jeuService.getById(id);
-	    jeu.setNom(jeuDTO.getNom());
-	    
-	    return jeuMapperImpl.mapToDto(jeuService.update(jeu));
+	    // Vérifie que l'id existe 
+	    if(jeuService.existById(id)) {
+	    	Jeu jeu = jeuService.getById(id);
+		    jeu.setNom(jeuDTO.getNom());
+		    
+		    return jeuMapperImpl.mapToDto(jeuService.update(jeu));
+	    }
+	    else {
+	    	throw new EntityNotFoundException();
+	    }
 	}
 	
 	/**
@@ -86,7 +96,11 @@ public class JeuController {
 	 */
 	@DeleteMapping(path = "/{id}")
 	public void delete(@PathVariable Long id) {
-		//TODO: Vérifier si l'id existe
-		jeuService.delete(id);
+		 // Vérifie que l'id existe
+		 if(jeuService.existById(id)) {
+			 jeuService.delete(id);}
+		 else {
+			 throw new EntityNotFoundException();
+		 }
 	}
 }

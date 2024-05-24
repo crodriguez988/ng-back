@@ -67,4 +67,9 @@ public class PlateformeService implements IService<Plateforme, Long>{
 	public void delete(Long id) {
 		plateformeRepository.deleteById(id);
 	}
+
+	@Override
+	public boolean existById(Long id) {
+		return plateformeRepository.existsById(id);
+	}
 }

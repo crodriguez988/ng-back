@@ -68,4 +68,9 @@ public class StudioDevService implements IService<StudioDev, Long>{
 	public void delete (Long id) {
 		studioDevRespository.deleteById(id);
 	}
+	
+	@Override
+	public boolean existById(Long id) {
+		return studioDevRespository.existsById(id);
+	}
 }

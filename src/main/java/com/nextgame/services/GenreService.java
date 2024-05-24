@@ -65,4 +65,9 @@ public class GenreService implements IService<Genre, Long>{
 	public void delete (Long id) {
 		genreRespository.deleteById(id);
 	}
+
+	@Override
+	public boolean existById(Long id) {
+		return genreRespository.existsById(id);
+	}
 }

@@ -66,4 +66,8 @@ public class JeuService implements IService<Jeu, Long> {
 	public List<Genre> getJeuGenres(Long id) {
 		return jeuRepository.getReferenceById(id).getGenres();
 	}
+	
+	public boolean existById(Long id) {
+		return jeuRepository.existsById(id);
+	}
 }
