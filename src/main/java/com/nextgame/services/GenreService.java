@@ -10,7 +10,7 @@ import com.nextgame.entities.Genre;
 import com.nextgame.repositories.IGenreRespository;
 
 /**
- * Cette classe contient tous les appels CRUD du repository Genre
+ * Ce service contient tous les appels CRUD du repository Genre.
  */
 @Service
 public class GenreService implements IService<Genre, Long>{
@@ -65,7 +65,12 @@ public class GenreService implements IService<Genre, Long>{
 	public void delete (Long id) {
 		genreRespository.deleteById(id);
 	}
-
+	
+	/**
+	 * Vérifie que l'id passé en param existe.
+	 * @param id
+	 * @return boolean
+	 */
 	@Override
 	public boolean existById(Long id) {
 		return genreRespository.existsById(id);

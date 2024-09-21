@@ -1,9 +1,13 @@
 package com.nextgame.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +23,9 @@ import com.nextgame.entities.Plateforme;
 import com.nextgame.mappers.PlateformeMapperImpl;
 import com.nextgame.services.PlateformeService;
 
-import jakarta.persistence.EntityNotFoundException;
-
+/**
+ * Contrôleur REST exposant les endpoints d'une plateforme, récupération, ajout, modifications, etc.
+ */
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/plateformes")
@@ -32,79 +37,93 @@ public class PlateformeController {
 	@Autowired
 	PlateformeMapperImpl plateformeMapperImpl;
 	
+	private static final Logger logger = LogManager.getLogger(PlateformeController.class);
+	
 	/**
-	 * EndPoint GET : Retourne une liste des plateformes
-	 * @return List<PlateformeDTO>
+	 * Retourne une liste avec toutes les plateformes.
+	 * @return ResponseEntity<List<PlateformeDTO>>
 	 */
 	@GetMapping()
-	public List<PlateformeDTO> getAll(){
-		List<PlateformeDTO> listePlateformeDto = new ArrayList<>();
-		plateformeService.getAll().forEach(plateforme -> listePlateformeDto.add(plateformeMapperImpl.mapToDto(plateforme)));
-		System.err.println(listePlateformeDto);
+	public ResponseEntity<List<PlateformeDTO>> getAllPlateformes(){
+		logger.info("PlateformeController - getAllPlateformes");
+		List<PlateformeDTO> listePlateformeDto = plateformeService.getAll()
+				.stream().map(plateformeMapperImpl::mapToDto).collect(Collectors.toList());
 		
-		return listePlateformeDto;
+		if (listePlateformeDto.isEmpty()) {
+	            logger.info("Aucune plateforme trouvée.");
+	            return ResponseEntity.noContent().build();
+        }
+		logger.info("Plateformes trouvées : {}", listePlateformeDto.size());
+		return ResponseEntity.ok(listePlateformeDto);
 	}
 	
 	/**
-	 * Endpoint GET /id : Retourne l'objet plateforme en fonction de l'id dans le path
+	 * Retourne la plateforme en fonction de l'id dans le path.
 	 * @param id
-	 * @return PlateformeDTO
+	 * @return ResponseEntity<PlateformeDTO>
 	 */
 	@GetMapping(path = "/{id}")
-	public PlateformeDTO getById(@PathVariable Long id) {
-		 // Vérifie que l'id existe 
-	    if(plateformeService.existById(id)) {
-	    	PlateformeDTO PlateformeDTO = plateformeMapperImpl.mapToDto(plateformeService.getById(id));
-			return PlateformeDTO;
-	    }
-	    else {
-	    	throw new EntityNotFoundException();
-	    }
+	public ResponseEntity<PlateformeDTO> getPlateformeById(@PathVariable Long id) {
+		logger.info("PlateformeController - getPlateformeById - id : {}", id);
+		// Vérifie que l'id existe
+		if(plateformeService.existById(id)) {
+			PlateformeDTO PlateformeDTO = plateformeMapperImpl.mapToDto(plateformeService.getById(id));
+			return ResponseEntity.ok(PlateformeDTO);
+		}
+		else {
+			logger.warn("Le plateforme avec l'id {} n'a pas été trouvée.", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
 	}
 	
 	/**
-	 * Endpoint POST : Permet de créer une nouvelle plateforme
+	 * Crée une nouvelle plateforme.
 	 * @param newPlateformeDTO
 	 * @return PlateformeDTO
 	 */
 	@PostMapping
-	public PlateformeDTO post(@RequestBody PlateformeDTO newPlateformeDTO) {
-		return plateformeMapperImpl.mapToDto(plateformeService.save(plateformeMapperImpl.mapToEntity(newPlateformeDTO)));
+	public ResponseEntity<PlateformeDTO> post(@RequestBody PlateformeDTO newPlateformeDTO) {
+		logger.info("PlateformeController - post");
+		return ResponseEntity.status(HttpStatus.CREATED).body(plateformeMapperImpl.mapToDto(plateformeService.save(plateformeMapperImpl.mapToEntity(newPlateformeDTO))));
 	}
 	
 	/**
-	 * Endpoint PUT : Mise à jour une plateforme en fonction de l'id dans le path
+	 * Met à jour une plateforme en fonction de l'id dans le path.
 	 * @param PlateformeDTO
 	 * @param id
-	 * @return PlateformeDTO
+	 * @return ResponseEntity<PlateformeDTO>
 	 */
 	@PutMapping(path = "/{id}")
-	public PlateformeDTO update (@RequestBody(required = true) PlateformeDTO plateformeDTO, @PathVariable long id) {
-		 // Vérifie que l'id existe 
-	    if(plateformeService.existById(id)) {
-	    	Plateforme plateforme = plateformeService.getById(id);
+	public ResponseEntity<PlateformeDTO> update (@RequestBody(required = true) PlateformeDTO plateformeDTO, @PathVariable long id) {
+		logger.info("PlateformeController - update");
+		// Vérifie que l'id existe
+		if(plateformeService.existById(id)) {
+			Plateforme plateforme = plateformeService.getById(id);
 			plateforme.setNom(plateformeDTO.getNom());
-			plateforme.setAbreviation(plateformeDTO.getAbreviation());
-			
-			return plateformeMapperImpl.mapToDto(plateformeService.update(plateforme));
-	    }
+			return ResponseEntity.ok(plateformeMapperImpl.mapToDto(plateformeService.update(plateforme)));
+		}
 		else {
-	    	throw new EntityNotFoundException();
-	    }
+			logger.warn("La plateforme avec l'id {} n'a pas été trouvée.", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
 	}
 	
 	/**
-	 * Endpoint DELETE : Permet de supprimer une Plateforme en fonction de l'id dans le path
+	 * Supprime une Plateforme en fonction de l'id dans le path.
 	 * @param id
+	 * @return ResponseEntity avec le statut HTTP approprié. 
 	 */
 	@DeleteMapping(path = "/{id}")
-	public void delete(@PathVariable Long id) {
-		 // Vérifie que l'id existe 
-	    if(plateformeService.existById(id)) {
-	    	plateformeService.delete(id);
-	    }
-		else {
-		    	throw new EntityNotFoundException();
-	  }
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		logger.info("PlateformeController - delete - id : {}", id);
+		// Vérifie que l'id existe
+		if (plateformeService.existById(id)) {
+		    plateformeService.delete(id);
+		    logger.info("La plateforme avec l'id {} a été supprimée.", id);
+		    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} else {
+		    logger.warn("La plateforme avec l'id {} n'a pas été trouvée.", id);
+		    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
 }

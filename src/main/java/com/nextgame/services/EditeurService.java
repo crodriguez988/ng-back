@@ -9,14 +9,17 @@ import org.springframework.stereotype.Service;
 import com.nextgame.entities.Editeur;
 import com.nextgame.repositories.IEditeurRepository;
 
+/**
+ * Ce service contient tous les appels CRUD et plus du repository Developpeur.
+ */
 @Service
-public class EditeurService implements IService<Editeur, Long>{
+public class EditeurService implements IService<Editeur, Long> {
 
 	@Autowired
 	IEditeurRepository editeurRespository;
-	
-	/** 
-	 * Retourne une liste de tous les éditeurs
+
+	/**
+	 * Retourne une liste de tous les éditeurs.
 	 * @return List<Editeur>
 	 */
 	@Override
@@ -27,7 +30,7 @@ public class EditeurService implements IService<Editeur, Long>{
 	}
 
 	/**
-	 * Retourne un objet editeur en fonction de l'id passé en paramètre
+	 * Retourne un editeur en fonction de l'id passé en paramètre.
 	 * @param id
 	 * @return Editeur
 	 */
@@ -37,7 +40,7 @@ public class EditeurService implements IService<Editeur, Long>{
 	}
 
 	/**
-	 * Permet d'enregistrer un éditeur et le retourne
+	 * Permet d'enregistrer un éditeur et le retourne.
 	 * @param editeur
 	 * @return Editeur
 	 */
@@ -48,6 +51,7 @@ public class EditeurService implements IService<Editeur, Long>{
 
 	/**
 	 * Met à jour l'éditeur passé dans le body
+	 * 
 	 * @param editeur
 	 * @return Editeur
 	 */
@@ -58,6 +62,7 @@ public class EditeurService implements IService<Editeur, Long>{
 
 	/**
 	 * Supprime l'élément correpondant à l'id passé en paramètre
+	 * 
 	 * @param id de l'éditeur
 	 */
 	@Override
@@ -65,6 +70,7 @@ public class EditeurService implements IService<Editeur, Long>{
 		editeurRespository.deleteById(id);
 	}
 
+	
 	@Override
 	public boolean existById(Long id) {
 		return editeurRespository.existsById(id);

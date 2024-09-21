@@ -1,9 +1,13 @@
 package com.nextgame.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +23,9 @@ import com.nextgame.entities.Genre;
 import com.nextgame.mappers.GenreMapperImpl;
 import com.nextgame.services.GenreService;
 
-import jakarta.persistence.EntityNotFoundException;
-
+/**
+ * Contrôleur REST exposant les endpoints d'un genre, récupération, ajout, modifications, etc.
+ */
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/genres")
@@ -31,81 +36,95 @@ public class GenreController {
 	
 	@Autowired GenreMapperImpl genreMapperImpl;
 	
+	private static final Logger logger = LogManager.getLogger(GenreController.class);
+	
+	
 	/**
-	 * EndPoint GET : Retourne une liste de genres
-	 * @return List<GenreDTO>
+	 * Retourne une liste de genres.
+	 * @return ResponseEntity<List<GenreDTO>>
 	 */
 	@GetMapping()
-	public List<GenreDTO> getAllGenres (){
-		//TODO: remplacer les system par un vrai logger
-		System.err.println("GenreController - getAll()");
-		List<GenreDTO> listGenresDto = new ArrayList<>();
-		genreService.getAll().forEach(genre -> listGenresDto.add(genreMapperImpl.mapToDto(genre)));
-		System.err.println(listGenresDto);
+	public ResponseEntity<List<GenreDTO>> getAllGenres (){
+		logger.info("GenreController - getAllGenres");
+		List<GenreDTO> listeGenresDto = genreService.getAll()
+				.stream().map(genreMapperImpl::mapToDto).collect(Collectors.toList());
 		
-		return listGenresDto;
+		if (listeGenresDto.isEmpty()) {
+	            logger.info("Aucun genre trouvé.");
+	            return ResponseEntity.noContent().build();
+        }
+		logger.info("Genres trouvés : {}", listeGenresDto.size());
+		return ResponseEntity.ok(listeGenresDto);
 	}
 	
 	/**
-	 * Endpoint GET /id : Retourne l'objet genre en fonction de l'id passé dans le path
+	 * Retourne un genre en fonction de l'id passé dans le path.
 	 * @param id
-	 * @return StudioDevDTO
+	 * @return ResponseEntity<GenreDTO> 
 	 */
 	@GetMapping(path = "/{id}")
-	public GenreDTO getById(@PathVariable Long id) {
-		System.err.println("GenreController - getById()");
-		// Vérifie que l'id existe 
-	    if(genreService.existById(id)) {
-			return genreMapperImpl.mapToDto(genreService.getById(id));
-	    }
+	public ResponseEntity<GenreDTO> getGenreById(@PathVariable Long id) {
+		logger.info("GenreController - getGenreById() - id : {}", id);
+		// Vérifie que l'id existe
+		if(genreService.existById(id)) {
+			GenreDTO genreDTO = genreMapperImpl.mapToDto(genreService.getById(id));
+			return ResponseEntity.ok(genreDTO);
+		}
 		else {
-	    	throw new EntityNotFoundException();
-	    }
+			logger.warn("Le développeur avec l'id {} n'a pas été trouvé.", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
 	}
 	
 	/**
-	 * Endpoint POST : Permet de créer un nouveau genre
+	 * Crée un nouveau genre.
 	 * @param newGenre
-	 * @return GenreDTO
+	 * @return ResponseEntity<GenreDTO>
 	 */
 	@PostMapping
-	public GenreDTO post(@RequestBody GenreDTO newGenre) {
-		return genreMapperImpl.mapToDto(genreService.save(genreMapperImpl.mapToEntity(newGenre)));
+	public ResponseEntity<GenreDTO> post(@RequestBody GenreDTO newGenre) {
+		logger.info("GenreController - post");
+		GenreDTO genreEnr = genreMapperImpl.mapToDto(genreService.save(genreMapperImpl.mapToEntity(newGenre)));
+		return ResponseEntity.status(HttpStatus.CREATED).body(genreEnr);
 	}
 	
 	/**
-	 * Endpoint PUT : Permet de mettre à jour un genre en fonction de l'id dans le path
+	 * Met à jour un genre en fonction de l'id dans le path.
 	 * @param genretDTO
 	 * @param id
-	 * @return GenreDTO
+	 * @return ResponseEntity<GenreDTO>
 	 */
 	@PutMapping(path = "/{id}")
-	public GenreDTO update (@RequestBody(required = true) GenreDTO genretDTO, @PathVariable long id) {
-		// Vérifie que l'id existe 
-	    if(genreService.existById(id)) {
-	    	Genre genre = genreService.getById(id);
-			genre.setLibelle(genretDTO.getLibelle());
-			
-			return genreMapperImpl.mapToDto(genreService.update(genre));
-	    }
+	public ResponseEntity<GenreDTO> update (@RequestBody(required = true) GenreDTO genreDTO, @PathVariable long id) {
+		logger.info("GenreController - update");
+		// Vérifie que l'id existe
+		if(genreService.existById(id)) {
+			Genre genre = genreService.getById(id);
+			genre.setLibelle(genreDTO.getLibelle());
+			return ResponseEntity.ok(genreMapperImpl.mapToDto(genreService.update(genre)));
+		}
 		else {
-	    	throw new EntityNotFoundException();
-	    }
+			logger.warn("Le genre avec l'id {} n'a pas été trouvé.", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
 	}
 	
 	/**
-	 * Endpoint DELETE : Permet de supprimer un genre en fonction de l'id dans le path
+	 * Supprime un genre en fonction de l'id dans le path
 	 * @param id
+	 * @return ResponseEntity avec le statut HTTP approprié. 
 	 */
 	@DeleteMapping(path = "/{id}")
-	public void delete(@PathVariable Long id) {
-		System.err.println("GenreController - delete()");
-		// Vérifie que l'id existe 
-	    if(genreService.existById(id)) {
-	    	genreService.delete(id);
-	    }
-		else {
-	    	throw new EntityNotFoundException();
-	    }
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		logger.info("GenreController - delete - id : {}", id);
+		// Vérifie que l'id existe
+		if (genreService.existById(id)) {
+			genreService.delete(id);
+		    logger.info("Le genre avec l'id {} a été supprimé.", id);
+		    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} else {
+		    logger.warn("Le genre avec l'id {} n'a pas été trouvé.", id);
+		    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
 }

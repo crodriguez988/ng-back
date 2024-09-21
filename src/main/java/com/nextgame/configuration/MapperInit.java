@@ -4,10 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.nextgame.mappers.EditeurMapperImpl;
+import com.nextgame.mappers.FranchiseMapperImpl;
 import com.nextgame.mappers.GenreMapperImpl;
 import com.nextgame.mappers.JeuMapperImpl;
 import com.nextgame.mappers.PlateformeMapperImpl;
-import com.nextgame.mappers.StudioDevMapperImpl;
+import com.nextgame.mappers.DeveloppeurMapperImpl;
 
 /**
  * Cette classe permet d'initialiser les beans pour tous les mappers utilisés
@@ -21,8 +22,8 @@ public class MapperInit {
 	}
 	
 	@Bean
-	public StudioDevMapperImpl studioDevMapperImpl() {
-		return new StudioDevMapperImpl();
+	public DeveloppeurMapperImpl developpeurMapperImpl() {
+		return new DeveloppeurMapperImpl();
 	}
 	
 	@Bean
@@ -38,5 +39,10 @@ public class MapperInit {
 	@Bean
 	public JeuMapperImpl jeuMapperImpl() {
 		return new JeuMapperImpl();
+	}
+	
+	@Bean
+	public FranchiseMapperImpl franchiseMapperImpl() {
+		return new FranchiseMapperImpl();
 	}
 }

@@ -1,9 +1,13 @@
 package com.nextgame.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +23,9 @@ import com.nextgame.entities.Editeur;
 import com.nextgame.mappers.EditeurMapperImpl;
 import com.nextgame.services.EditeurService;
 
-import jakarta.persistence.EntityNotFoundException;
-
+/**
+ * Contrôleur REST exposant les endpoints d'un Editeur, récupération, ajout, modifications, etc.
+ */
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/editeurs")
@@ -32,75 +37,96 @@ public class EditeurController {
 	@Autowired
 	EditeurMapperImpl editeurMapperImpl;
 	
+	private static final Logger logger = LogManager.getLogger(EditeurController.class);
+	
 	/**
-	 * EndPoint GET : Retourne une liste d'éditeurs
-	 * @return List<EditeurDTO>
+	 * Retourne une liste avec tous les éditeurs.
+	 * @return ResponseEntity<List<EditeurDTO>>
 	 */
 	@GetMapping()
-	public List<EditeurDTO> getAllEditeurs (){
-		List<EditeurDTO> listEditeurDto = new ArrayList<>();
-		editeurService.getAll().forEach(editeur -> listEditeurDto.add(editeurMapperImpl.mapToDto(editeur)));
-		System.err.println(listEditeurDto);
-		return listEditeurDto;
+	public ResponseEntity<List<EditeurDTO>> getAllEditeurs (){
+		logger.info("EditeurController - getAllEditeurs");
+		List<EditeurDTO> listeEditeursDto = editeurService.getAll()
+				.stream().map(editeurMapperImpl::mapToDto).collect(Collectors.toList());
+		
+		if (listeEditeursDto.isEmpty()) {
+	            logger.info("Aucun éditeur trouvé.");
+	            return ResponseEntity.noContent().build();
+        }
+		logger.info("Editeurs trouvés : {}", listeEditeursDto.size());
+		return ResponseEntity.ok(listeEditeursDto);
 	}
 	
 	/**
-	 * Endpoint GET /id : Retourne l'objet editeur en fonction de l'id passé dans le path
+	 * Retourne l'editeur en fonction de l'id passé dans le path.
 	 * @param id
-	 * @return EditeurDTO
+	 * @return ResponseEntity<EditeurDTO>
 	 */
 	@GetMapping(path = "/{id}")
-	public EditeurDTO getById(@PathVariable Long id) {
+	public ResponseEntity<EditeurDTO> getEditeurById(@PathVariable Long id) {
+		logger.info("EditeurController - getEditeurById - id : {}", id);
+		
 		// Vérifie que l'id existe
 		if(editeurService.existById(id)) {
-			return editeurMapperImpl.mapToDto(editeurService.getById(id));
+			EditeurDTO editeurDTO = editeurMapperImpl.mapToDto(editeurService.getById(id));
+			return ResponseEntity.ok(editeurDTO);
 		}
 		else {
-			throw new EntityNotFoundException();
+			logger.warn("L'éditeur avec l'id {} n'a pas été trouvé.", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 	
 	/**
-	 * Endpoint POST : Permet de créer un nouvel éditeur
+	 * Permet de créer un nouvel éditeur.
 	 * @param newEditeur
-	 * @return EditeurDTO
+	 * @return ResponseEntity<EditeurDTO>
 	 */
 	@PostMapping
-	public EditeurDTO post(@RequestBody EditeurDTO newEditeur) {
-		return editeurMapperImpl.mapToDto(editeurService.save(editeurMapperImpl.mapToEntity(newEditeur)));
+	public ResponseEntity<EditeurDTO> post(@RequestBody EditeurDTO newEditeur) {
+		logger.info("EditeurController - post");
+		EditeurDTO editeurEnr = editeurMapperImpl.mapToDto(editeurService.save(editeurMapperImpl.mapToEntity(newEditeur)));
+		return ResponseEntity.status(HttpStatus.CREATED).body(editeurEnr);
 	}
 	
 	/**
-	 * Endpoint PUT : Permet de mettre à jour un éditeur en fonction de l'id dans le path
+	 * Met à jour un éditeur en fonction de l'id dans le path.
 	 * @param editeurDTO
 	 * @param id
-	 * @return EditeurDTO
+	 * @return ResponseEntity<EditeurDTO>
 	 */
 	@PutMapping(path = "/{id}")
-	public EditeurDTO update (@RequestBody EditeurDTO editeurDTO, @PathVariable long id) {
+	public ResponseEntity<EditeurDTO> update (@RequestBody EditeurDTO editeurDTO, @PathVariable long id) {
+		logger.info("EditeurController - update");
 		// Vérifie que l'id existe
 		if(editeurService.existById(id)) {
 		    Editeur editeur = editeurService.getById(id);
 		    editeur.setNom(editeurDTO.getNom());
-		    return editeurMapperImpl.mapToDto(editeurService.update(editeur));
+		    return ResponseEntity.ok(editeurMapperImpl.mapToDto(editeurService.update(editeur)));
 		}
 		else {
-			throw new EntityNotFoundException();
+			logger.warn("L'éditeur avec l'id {} n'a pas été trouvé.", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 	
 	/**
-	 * Endpoint DELETE : Permet de supprimer un éditeur en fonction de l'id dans le path
+	 * Supprime un éditeur en fonction de l'id dans le path.
 	 * @param id
+	 * @return ResponseEntity avec le statut HTTP approprié. 
 	 */
 	@DeleteMapping(path = "/{id}")
-	public void delete(@PathVariable Long id) {
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		logger.info("EditeurController - delete - id : {}", id);
 		// Vérifie que l'id existe
 		if (editeurService.existById(id)){
 			editeurService.delete(id);
+			logger.info("L'éditeur avec l'id {} a été supprimé.", id);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		}
 		else {
-			throw new EntityNotFoundException();
+			logger.info("L'éditeur avec l'id {} n'a pas été trouvé.", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
 }

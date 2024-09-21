@@ -10,7 +10,7 @@ import com.nextgame.entities.Plateforme;
 import com.nextgame.repositories.IPlateformeRepository;
 
 /**
- * Cette classe contient tous les appels CRUD du repository Plateforme
+ *  Ce service contient tous les appels CRUD du repository Plateforme.
  */
 @Service
 public class PlateformeService implements IService<Plateforme, Long>{
@@ -68,6 +68,11 @@ public class PlateformeService implements IService<Plateforme, Long>{
 		plateformeRepository.deleteById(id);
 	}
 
+	/**
+	 * Vérifie que l'id passé en param existe.
+	 * @param id
+	 * @return boolean
+	 */
 	@Override
 	public boolean existById(Long id) {
 		return plateformeRepository.existsById(id);

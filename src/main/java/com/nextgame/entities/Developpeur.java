@@ -14,30 +14,30 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "GENRE")
+@Table(name = "DEVELOPPEUR")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
-
 /**
- * Cette classe contient les différents genres pour un jeu-vidéo (action, FPS, TPS, etc...)
+ * Cette classe contient les informations d'un développeur (Studio(s)) qui a/ont développé le jeu
  */
-public class Genre implements Serializable {
+public class Developpeur implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
+	/** L'id du developpeur */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_genre")
+	@Column(name = "id_developpeur")
 	private long id;
-
-	/** Indique le nom du genre */
-	@Column(name = "libelle")
-	private String libelle;
 	
+	/** Nom du developpeur */
+	@Column(name = "nom")
+	private String nom;
+
 	@Override
 	public String toString() {
-		return "Genre [id=" + id + ", nom=" + libelle + "]";
+		return "Developpeur [id=" + id + ", nom=" + nom + "]";
 	}
 }

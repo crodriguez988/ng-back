@@ -1,7 +1,5 @@
 package com.nextgame.entities;
 
-import java.io.Serializable;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,30 +12,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "STUDIO_DEV")
+@Table(name = "FRANCHISE")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-/**
- * Cette classe permet de gérer le(s) Studio(s) qui a/ont développé le jeu
- */
-public class StudioDev implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
 
-	/** L'id du Studio */
+/**
+ * Cette classe contient les informations d'une franchise de jeux-vidéo
+ * Une franchise est un ensemble de jeux qui partagent un univers commun, des personnages récurrents, une histoire ou un thème similaire
+ */
+public class Franchise {
+	/** Id de la franchise de jeux-vidéos*/
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_studio")
+	@Column(name = "id_franchise")
 	private long id;
 	
-	/** Nom du Studio */
-	@Column(name = "nom")
+	/** Nom de la franchise */
 	private String nom;
 
 	@Override
 	public String toString() {
-		return "StudioDev [id=" + id + ", nom=" + nom + "]";
-	}
+		return "Franchise [id=" + id + ", nom=" + nom + "]";
+	}	
 }

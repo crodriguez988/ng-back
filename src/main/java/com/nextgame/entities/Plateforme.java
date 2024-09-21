@@ -19,6 +19,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
+/**
+ * Cette classe contient les informations liées à une plateforme (PC, PS5, Xbox, etc...)
+ */
 public class Plateforme implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
