@@ -1,7 +1,7 @@
-CREATE TABLE studio_dev (
-id_studio INT NOT NULL AUTO_INCREMENT, 
+CREATE TABLE developpeur (
+id_developpeur INT NOT NULL AUTO_INCREMENT, 
 nom VARCHAR(200) NOT NULL,
-PRIMARY KEY (id_studio));
+PRIMARY KEY (id_developpeur));
 
 CREATE TABLE editeur (
 id_editeur INT NOT NULL AUTO_INCREMENT, 
@@ -29,12 +29,12 @@ cooperatif BOOLEAN,
 multijoueur BOOLEAN,
 PRIMARY KEY (id_jeu));
 
-CREATE TABLE jeu_studio_dev (
+CREATE TABLE jeu_developpeur (
 id_jeu BIGINT NOT NULL,
-id_studio INT NOT NULL,
-PRIMARY KEY (id_jeu, id_studio),
+id_developpeur INT NOT NULL,
+PRIMARY KEY (id_jeu, id_developpeur),
 FOREIGN KEY (id_jeu) REFERENCES jeu (id_jeu), 
-FOREIGN KEY (id_studio) REFERENCES studio_dev(id_studio));
+FOREIGN KEY (id_developpeur) REFERENCES developpeur(id_developpeur));
 
 CREATE TABLE jeu_editeur (
 id_jeu BIGINT NOT NULL,

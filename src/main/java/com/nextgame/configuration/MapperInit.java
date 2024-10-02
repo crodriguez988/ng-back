@@ -8,6 +8,7 @@ import com.nextgame.mappers.FranchiseMapperImpl;
 import com.nextgame.mappers.GenreMapperImpl;
 import com.nextgame.mappers.JeuMapperImpl;
 import com.nextgame.mappers.PlateformeMapperImpl;
+import com.nextgame.mappers.UtilisateurMapperImpl;
 import com.nextgame.mappers.DeveloppeurMapperImpl;
 
 /**
@@ -44,5 +45,10 @@ public class MapperInit {
 	@Bean
 	public FranchiseMapperImpl franchiseMapperImpl() {
 		return new FranchiseMapperImpl();
+	}
+	
+	@Bean
+	public UtilisateurMapperImpl utilisateurMapperImpl () {
+		return new UtilisateurMapperImpl(); 
 	}
 }
