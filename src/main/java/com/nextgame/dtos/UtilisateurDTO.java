@@ -13,11 +13,21 @@ import lombok.Setter;
 @Setter
 public class UtilisateurDTO {
 	
+	/** Id de l'utilisateur */
+	private Long id;
+	
+	/** Email de l'utilisateur */
 	private String email;
-	private String pseudonyme;
+	
+	/** Nom de l'utilisateur */
+	private String nomUtilisateur;
+	
+	/** Mot de passe de l'utilisateur */
 	private String motDePasse;
+	
 	@Override
 	public String toString() {
-		return "UtilisateurDTO [email=" + email + ", pseudonyme=" + pseudonyme + ", motDePasse=" + motDePasse + "]";
+		return "UtilisateurDTO [id=" + id + ", email=" + email + ", nomUtilisateur=" + nomUtilisateur + ", motDePasse="
+				+ motDePasse + "]";
 	}
 }

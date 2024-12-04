@@ -30,7 +30,7 @@ public class Plateforme implements Serializable {
 	/** L'id de la plateforme */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_plateforme")
+	@Column(name = "id")
 	private long id;
 	
 	/** Nom de la plateforme (PC / Play Station 5 / XBOX etc) */

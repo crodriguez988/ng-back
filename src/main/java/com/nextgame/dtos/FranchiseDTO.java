@@ -1,10 +1,5 @@
 package com.nextgame.dtos;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.nextgame.entities.Jeu;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -24,11 +19,8 @@ public class FranchiseDTO {
 	/** Le nom la franchise */
 	private String nom;
 
-	/** Liste des jeux appartenant à une franchise */
-	private List<Jeu> jeux = new ArrayList<>();
-
 	@Override
 	public String toString() {
-		return "FranchiseDTO [id=" + id + ", nom=" + nom + ", jeux=" + jeux + "]";
+		return "FranchiseDTO [id=" + id + ", nom=" + nom + "]";
 	}
 }

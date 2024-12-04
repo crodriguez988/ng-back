@@ -1,14 +1,20 @@
 package com.nextgame.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.nextgame.dtos.LoginRequest;
 import com.nextgame.entities.Utilisateur;
 import com.nextgame.repositories.IUtilisateurRepository;
+import com.nextgame.utils.JwtService;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -23,6 +29,12 @@ public class UtilisateurService implements IService<Utilisateur, Long>{
 	
 	@Autowired
 	private IUtilisateurRepository utilisateurRepository;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private JwtService jwtService;
 	
 	public Utilisateur save(Utilisateur utilisateur) {
 		// Hashage du mot de passe
@@ -57,24 +69,26 @@ public class UtilisateurService implements IService<Utilisateur, Long>{
 		
 		utilisateurSave.setEmail(utilisateur.getEmail());
 		
-		if(existePseudonyme(utilisateur.getPseudonyme())) {
-			 throw new IllegalArgumentException("Ce pseudonyme existe déjà.");
-		}
-		
-		utilisateurSave.setPseudonyme(utilisateur.getPseudonyme());
+		utilisateurSave.setNomUtilisateur(utilisateur.getNomUtilisateur());
 		
 	    return utilisateurRepository.saveAndFlush(utilisateurSave);
 	}
 	
-	public Utilisateur updateMdp(long id, String motDePasse) {
-		Utilisateur utilisateurSauve = new Utilisateur();
-		if(!utilisateurRepository.existsById(id)) {
-			String mdpHache = passwordEncoder.encode(motDePasse);
-			utilisateurSauve.setMotDePasse(mdpHache);
-		}
-		
-		return utilisateurSauve;
-	}
+	/**
+	 * Mise à jour du mot de passe pour l'utilisateur
+	 * @param id
+	 * @param motDePasse
+	 * @return Utilisateur
+	 */
+//	public Utilisateur updateMdp(long id, String motDePasse) {
+//		Utilisateur utilisateurSauve = new Utilisateur();
+//		if(utilisateurRepository.existsById(id)) {
+//			String mdpHache = passwordEncoder.encode(motDePasse);
+//			utilisateurSauve.setMotDePasse(mdpHache);
+//		}
+//		
+//		return utilisateurSauve;
+//	}
 	
 	/**
 	 * Supprime l'élément correpondant à l'id passé en paramètre.
@@ -96,18 +110,20 @@ public class UtilisateurService implements IService<Utilisateur, Long>{
 		return utilisateurRepository.existsById(id);
 	}
 	
+	/**
+	 * Vérifie si l'adresse existe déjà
+	 * @param eMail
+	 * @return
+	 */
 	public boolean existeMail(String eMail) {
 		return utilisateurRepository.existsByEmail(eMail);
 	}
 	
-	public boolean existePseudonyme(String pseudo) {
-		return utilisateurRepository.existsByEmail(pseudo);
-	}
-
 	@Override
 	public List<Utilisateur> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Utilisateur> utilisateurs = new ArrayList<Utilisateur>();
+		utilisateurs.addAll(utilisateurRepository.findAll());
+		return utilisateurs;
 	}
 
 	@Override
@@ -115,21 +131,28 @@ public class UtilisateurService implements IService<Utilisateur, Long>{
 		return utilisateurRepository.getReferenceById(id);
 	}
 	
-	public Utilisateur authentification(String email, String motDePasse) {
-        Utilisateur utilisateur = new Utilisateur();
-        //Vérification du mail
-        if(utilisateurRepository.findByEmail(email) == null) {
-        	 throw new IllegalArgumentException("Utilisateur non trouvé"); 
-        }
-        else {
-        	utilisateur = utilisateurRepository.findByEmail(email);
-        }
-
-        // Vérification du mot de passe
-        if (passwordEncoder.matches(motDePasse, utilisateur.getMotDePasse())) {
-            return utilisateur;  
-        } else {
-            throw new IllegalArgumentException("Mot de passe incorrect");
-        }
-    }
+	/**
+	 * Retourne un JWT Token
+	 * @param loginRequest
+	 * @return String
+	 */
+	public String verificactionAuthentification (LoginRequest loginRequest) {
+		
+		Utilisateur utilisateur = utilisateurRepository.findByEmail(loginRequest.getEmail());
+		
+		if(utilisateur == null) {
+			throw new EntityNotFoundException("Utilisateur introuvable avec le mail : " + loginRequest.getEmail());
+		}
+		
+		Authentication authentication = 
+				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getMotDePasse()));
+		
+		if (authentication.isAuthenticated()) {
+			return jwtService.genererToken(utilisateur);
+		}
+		else {
+			return "NOT LOGGED";
+		}
+	}
+	
 }

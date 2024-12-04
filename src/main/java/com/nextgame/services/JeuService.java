@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nextgame.dtos.JeuxDetailsDTO;
 import com.nextgame.entities.Jeu;
 import com.nextgame.repositories.IJeuRepository;
 
@@ -109,5 +110,13 @@ public class JeuService implements IService<Jeu, Long> {
 	 */
 	public List<Jeu> getAllJeuxByAnneeSortie (int annee) {
 		return jeuRepository.findByAnneSortie(annee);
+	}
+	
+	/**
+	 * 
+	 * @return List<JeuDetailsDTO>
+	 */
+	public List<JeuxDetailsDTO>getListeJeuxDetails() {
+		return jeuRepository.findAllJeuxDetails();
 	}
 }

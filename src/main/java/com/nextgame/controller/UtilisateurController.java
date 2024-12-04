@@ -40,8 +40,8 @@ public class UtilisateurController {
 	private static final Logger logger = LogManager.getLogger(UtilisateurController.class);
 	
 	/**
-	 * 
-	 * @return
+	 * Retourne tous les utilisateurs 
+	 * @return ResponseEntity<List<UtilisateurDTO>>
 	 */
 	@GetMapping
 	public ResponseEntity<List<UtilisateurDTO>> getAllUtilisateurs() { 
@@ -59,11 +59,7 @@ public class UtilisateurController {
 		return ResponseEntity.ok(listeUtilisateursDto);
 	}
 	
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 */
+	@GetMapping(path = "/{id}")
 	public ResponseEntity<UtilisateurDTO> getUtilisateurById(@PathVariable Long id) {
 		logger.info("UtilisateurController : getUtilisateurById - id : {}", id);
 		// Vérifie que l'id existe
@@ -81,7 +77,7 @@ public class UtilisateurController {
 	 * @param newutilisateur
 	 * @return ResponseEntity<UtilisateurDTO>
 	 */
-	@PostMapping
+	@PostMapping(path = "/inscription")
 	public ResponseEntity<UtilisateurDTO> post(@RequestBody UtilisateurDTO newUtilisateur) {
 		logger.info("UtilisateurController : post");
 		logger.info("new user  :  {} ", newUtilisateur);
@@ -101,7 +97,7 @@ public class UtilisateurController {
 	    if(utilisateurService.existById(id)) {
 	    	Utilisateur utilisateur = utilisateurService.getById(id);
 	    	utilisateur.setEmail(utilisateurDTO.getEmail());
-	    	utilisateur.setPseudonyme(utilisateurDTO.getPseudonyme());
+	    	utilisateur.setNomUtilisateur(utilisateurDTO.getNomUtilisateur());
 	    	
 		    return ResponseEntity.ok(utilisateurMapperImpl.mapToDto(utilisateurService.update(utilisateur)));
 	    }

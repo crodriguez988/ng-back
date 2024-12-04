@@ -7,20 +7,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "DEVELOPPEUR")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 /**
- * Cette classe contient les informations d'un développeur (Studio(s)) qui a/ont développé le jeu
+ * Cette entité contient les informations d'un développeur (Studio(s)) qui a/ont développé le jeu
  */
 public class Developpeur implements Serializable{
 	

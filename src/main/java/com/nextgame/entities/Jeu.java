@@ -1,11 +1,13 @@
 package com.nextgame.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import jakarta.annotation.Nullable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,19 +18,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "JEU")
 @Getter
 @Setter
 @NoArgsConstructor
 
 /**
- * Cette classe contient toutes les informations relatives à un jeu-vidéo
+ * Cette entité contient toutes les informations relatives à un jeu-vidéo
  */
 public class Jeu implements Serializable {
 	
@@ -37,7 +38,7 @@ public class Jeu implements Serializable {
 	/** L'id du jeu-video */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_jeu")
+	@Column(name = "id")
 	private long id;
 	
 	/** Le nom du jeu */
@@ -46,7 +47,7 @@ public class Jeu implements Serializable {
 	
 	/** La date sortie du jeu */
 	@Column(name = "date_sortie")
-	private Date dateSortie;
+	private LocalDate dateSortie;
 	
 	/** Le synopsis du jeu*/
 	@Column(name = "synopsis")
@@ -97,12 +98,16 @@ public class Jeu implements Serializable {
 	private List<Plateforme> plateformes = new ArrayList<>();
 	
 	/** Un jeu peut appartenir à une franchise de jeux */
-	@ManyToOne()
-    @JoinColumn(name = "id_franchise")
-	@Nullable
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_franchise", nullable = true)
+	@JsonBackReference
 	private Franchise franchise;
+	
+	/** Lien vers l'utilisateur, crée une table d'association */
+	@OneToMany(mappedBy = "jeu", cascade = CascadeType.ALL)
+	private List<JeuUtilisateur> utilisateursJeux = new ArrayList<>();
 
-	public Jeu(long id, String nom, Date dateSortie, String synopsis, Boolean goty, Boolean solo, Boolean cooperatif,
+	public Jeu(long id, String nom, LocalDate dateSortie, String synopsis, Boolean goty, Boolean solo, Boolean cooperatif,
 			Boolean multijoueur, List<Genre> genres, List<Developpeur> developpeurs, List<Editeur> editeurs,
 			List<Plateforme> plateformes, Franchise franchise) {
 		super();

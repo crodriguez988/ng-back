@@ -1,7 +1,10 @@
 package com.nextgame.enums;
 
+/**
+ * Enumération pour l'état de complétion du jeu 
+ */
 public enum EtatJeu {
-	AFAIRE("A faire"), ENCOURS("En cours"), TERMINE("Terminé");
+	PAS_COMMENCE("Pas commencé"), EN_COURS("En cours"), TERMINE("Terminé"), ABANDONNE("Abandonné");
 
 	private String etat;
 	

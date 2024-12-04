@@ -11,6 +11,10 @@ public class UtilisateurMapperImpl implements Mapper<Utilisateur, UtilisateurDTO
 	@Autowired
 	private ModelMapper modelMapper;
 
+	public UtilisateurMapperImpl() {
+		super();
+	}
+
 	@Override
 	public UtilisateurDTO mapToDto(Utilisateur utilisateur) {
 		return modelMapper.map(utilisateur, UtilisateurDTO.class);

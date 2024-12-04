@@ -7,21 +7,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "GENRE")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
 
 /**
- * Cette classe contient les différents genres pour un jeu-vidéo (action, FPS, TPS, etc...)
+ * Cette entité contient les différents genres pour un jeu-vidéo (action, FPS, TPS, etc...)
  */
 public class Genre implements Serializable {
 	

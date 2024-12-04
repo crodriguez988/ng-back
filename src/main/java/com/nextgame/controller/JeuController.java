@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nextgame.dtos.JeuDTO;
+import com.nextgame.dtos.JeuxDetailsDTO;
 import com.nextgame.entities.Jeu;
 import com.nextgame.mappers.JeuMapperImpl;
 import com.nextgame.services.JeuService;
@@ -76,58 +77,6 @@ public class JeuController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
-	
-	/**
-	 * Crée un novueau jeu.
-	 * @param newJeu
-	 * @return ResponseEntity<JeuDTO>
-	 */
-	@PostMapping
-	public ResponseEntity<JeuDTO> post(@RequestBody JeuDTO newJeu) {
-		logger.info("JeuController : post");
-		return ResponseEntity.ok(jeuMapperImpl.mapToDto(jeuService.save(jeuMapperImpl.mapToEntity(newJeu))));
-	}
-	
-	/**
-	 * Met à jour un jeu en fonction de l'id dans le path.
-	 * @param jeuDTO
-	 * @param id
-	 * @return ResponseEntity<JeuDTO>
-	 */
-	@PutMapping(path = "/{id}")
-	public ResponseEntity<JeuDTO> update (@RequestBody JeuDTO jeuDTO, @PathVariable long id) {
-		logger.info("JeuController : update");
-	    // Vérifie que l'id existe 
-	    if(jeuService.existById(id)) {
-	    	Jeu jeu = jeuService.getById(id);
-		    jeu.setNom(jeuDTO.getNom());
-		    return ResponseEntity.ok(jeuMapperImpl.mapToDto(jeuService.update(jeu)));
-	    }
-	    else {
-	    	logger.warn("Le jeu avec l'id {} n'a pas été trouvé.", id);
-	    	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-	    }
-	}
-	
-	/**
-	 * Supprime jeu en fonction de l'id dans le path.
-	 * @param id
-	 * @return ResponseEntity avec le statut HTTP approprié. 
-	 */
-	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		logger.info("JeuController : delete - id : {}", id);
-		// Vérifie que l'id existe
-		if(jeuService.existById(id)) {
-			jeuService.delete(id);
-			logger.info("Le jeu avec l'id {} a été supprimé.", id);
-		    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		} else {
-			logger.warn("Le jeu avec l'id {} n'a pas été trouvé.", id);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-	}
-	
 	
 	/**
 	 * Retourne une liste de jeux en fonction de l'année passée en parametre.
@@ -204,4 +153,70 @@ public class JeuController {
         logger.info("Jeux trouvés : {}", listeJeuxDto.size());
         return ResponseEntity.ok(listeJeuxDto);
 	}
+	
+	/**
+	 * Retourne une liste de jeu avec les données telles que : 
+	 * - Nom
+	 * - Développeur
+	 * - Note (moyen totale du jeu)
+	 * - EtatJeu 
+	 * @return ResponseEntity<List<JeuxDetailsDTO>>
+	 */
+	@GetMapping(path = "detailJeux")
+	public ResponseEntity<List<JeuxDetailsDTO>> getListeDetailsJeux(){
+		logger.info("JeuController : getListeDetailsJeux ");
+		List<JeuxDetailsDTO> jeuxDetails = jeuService.getListeJeuxDetails();
+		return ResponseEntity.ok(jeuxDetails); 
+	}
+	
+	/**
+	 * Crée un novueau jeu.
+	 * @param newJeu
+	 * @return ResponseEntity<JeuDTO>
+	 */
+	@PostMapping
+	public ResponseEntity<JeuDTO> post(@RequestBody JeuDTO newJeu) {
+		logger.info("JeuController : post");
+		return ResponseEntity.ok(jeuMapperImpl.mapToDto(jeuService.save(jeuMapperImpl.mapToEntity(newJeu))));
+	}
+	
+	/**
+	 * Met à jour un jeu en fonction de l'id dans le path.
+	 * @param jeuDTO
+	 * @param id
+	 * @return ResponseEntity<JeuDTO>
+	 */
+	@PutMapping(path = "/{id}")
+	public ResponseEntity<JeuDTO> update (@RequestBody JeuDTO jeuDTO, @PathVariable long id) {
+		logger.info("JeuController : update");
+	    // Vérifie que l'id existe 
+	    if(jeuService.existById(id)) {
+	    	Jeu jeu = jeuService.getById(id);
+		    jeu.setNom(jeuDTO.getNom());
+		    return ResponseEntity.ok(jeuMapperImpl.mapToDto(jeuService.update(jeu)));
+	    }
+	    else {
+	    	logger.warn("Le jeu avec l'id {} n'a pas été trouvé.", id);
+	    	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    }
+	}
+	
+	/**
+	 * Supprime jeu en fonction de l'id dans le path.
+	 * @param id
+	 * @return ResponseEntity avec le statut HTTP approprié. 
+	 */
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		logger.info("JeuController : delete - id : {}", id);
+		// Vérifie que l'id existe
+		if(jeuService.existById(id)) {
+			jeuService.delete(id);
+			logger.info("Le jeu avec l'id {} a été supprimé.", id);
+		    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} else {
+			logger.warn("Le jeu avec l'id {} n'a pas été trouvé.", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}	
 }
