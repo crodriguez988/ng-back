@@ -25,9 +25,9 @@ public class DeveloppeurService implements IService<Developpeur, Long>{
 	 */
 	@Override
 	public List<Developpeur> getAll() {
-		List<Developpeur> developpeur = new ArrayList<Developpeur>();
-		developpeur.addAll(developpeurRespository.findAll());
-		return developpeur;
+		List<Developpeur> listeDeveloppeurs = new ArrayList<Developpeur>();
+		listeDeveloppeurs.addAll(developpeurRespository.findAll());
+		return listeDeveloppeurs;
 	}
 	
 	/**

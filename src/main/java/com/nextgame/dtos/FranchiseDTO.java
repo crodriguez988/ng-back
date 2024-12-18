@@ -18,9 +18,12 @@ public class FranchiseDTO {
 	
 	/** Le nom la franchise */
 	private String nom;
+	
+	/** Abréviation de la franchise */
+	private String abreviation;
 
 	@Override
 	public String toString() {
-		return "FranchiseDTO [id=" + id + ", nom=" + nom + "]";
+		return "FranchiseDTO [id=" + id + ", nom=" + nom + ", abreviation=" + abreviation + "]";
 	}
 }

@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,6 +83,7 @@ public class GenreController {
 	 * @return ResponseEntity<GenreDTO>
 	 */
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
 	public ResponseEntity<GenreDTO> post(@RequestBody GenreDTO newGenre) {
 		logger.info("GenreController - post");
 		GenreDTO genreEnr = genreMapperImpl.mapToDto(genreService.save(genreMapperImpl.mapToEntity(newGenre)));
@@ -95,6 +97,7 @@ public class GenreController {
 	 * @return ResponseEntity<GenreDTO>
 	 */
 	@PutMapping(path = "/{id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
 	public ResponseEntity<GenreDTO> update (@RequestBody(required = true) GenreDTO genreDTO, @PathVariable long id) {
 		logger.info("GenreController - update");
 		// Vérifie que l'id existe
@@ -115,6 +118,7 @@ public class GenreController {
 	 * @return ResponseEntity avec le statut HTTP approprié. 
 	 */
 	@DeleteMapping(path = "/{id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		logger.info("GenreController - delete - id : {}", id);
 		// Vérifie que l'id existe

@@ -38,6 +38,9 @@ public class Franchise implements Serializable{
 	
 	/** Nom de la franchise */
 	private String nom;
+	
+	/** Abrviation de la franchise */
+	private String abreviation;
 
 	@OneToMany(mappedBy = "franchise")
 	@JsonManagedReference
