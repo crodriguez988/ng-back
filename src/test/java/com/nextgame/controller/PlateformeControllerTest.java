@@ -1,5 +1,6 @@
 package com.nextgame.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -120,6 +121,12 @@ public class PlateformeControllerTest {
 	public void postTest() throws Exception {
 		Plateforme plateforme = new Plateforme();
 		plateforme.setNom("PS6");
+		
+		PlateformeDTO plateformeDTO = new PlateformeDTO();
+		plateformeDTO.setNom("PS6");
+		
+		when(plateformeMapperImpl.mapToDto(plateforme)).thenReturn(plateformeDTO);
+		when(plateformeService.save(any(Plateforme.class))).thenReturn(plateforme);
 		
 		//Mock pour la requete POST
 		mockMvc.perform(MockMvcRequestBuilders.post(uri)

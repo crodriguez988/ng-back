@@ -72,12 +72,19 @@ public class DeveloppeurControllerTest {
 		 Developpeur developpeur = new Developpeur();
 		 developpeur.setNom("Larrian Studios");
 		 
+		 DeveloppeurDTO developpeurDTO = new DeveloppeurDTO();
+		 developpeurDTO.setNom("Larrian Studios");
+		 
+		//Mock des appels des services et du mapper to DTO
+		when(developpeurMapperImpl.mapToDto(developpeur)).thenReturn(developpeurDTO);
+		when(developpeurService.getById(1L)).thenReturn(developpeur);
+		
 		//Mock pour la requete POST
-		 mockMvc.perform(MockMvcRequestBuilders.post(uri)
-    		.header("Authorization", "Bearer " + jwtToken)
-	    	.accept(MediaType.APPLICATION_JSON)
-	        .contentType(MediaType.APPLICATION_JSON)
-	        .content(objectMapper.writeValueAsString(developpeur)))
+		mockMvc.perform(MockMvcRequestBuilders.post(uri)
+				.header("Authorization", "Bearer " + jwtToken)
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(developpeur)))
 		 .andExpect(MockMvcResultMatchers.status().isCreated());
 	 }
 	 
